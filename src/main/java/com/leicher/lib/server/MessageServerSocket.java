@@ -1,8 +1,11 @@
 package com.leicher.lib.server;
 
+import com.leicher.lib.manage.BaseSocket;
+import com.leicher.lib.manage.SocketManager;
 import com.leicher.lib.manage.SocketThread;
 import com.leicher.lib.util.CloseUtil;
 import com.leicher.lib.util.Constants;
+import com.leicher.lib.util.IdUtil;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,7 +15,7 @@ import java.net.Socket;
  * Created by Administrator on 2017/5/16.
  */
 
-public class MessageServerSocket implements SocketThread{
+public class MessageServerSocket extends BaseSocket implements SocketThread{
 
     private ServerSocket socket;
 
@@ -32,6 +35,7 @@ public class MessageServerSocket implements SocketThread{
         if (!isClosed()){
             CloseUtil.closeServerSocket(socket);
         }
+        IdUtil.destroyId(id());
     }
 
     @Override
@@ -40,21 +44,23 @@ public class MessageServerSocket implements SocketThread{
     }
 
     @Override
-    public boolean shutDown() {
-        return false;
+    public void shutDown() {
+        setIntercept(true);
+        manager.remove(this);
     }
 
     @Override
-    public boolean shutDownNow() {
-        return false;
+    public int id() {
+        return id;
     }
 
     @Override
     public void run() {
         if (!isClosed()){
-            while (true){
+            while (!isIntercept()){
                 try {
-                    new MessageServerAgent(socket.accept());
+                    MessageServerAgent agent = new MessageServerAgent(socket.accept());
+                    SocketManager.init().put(agent.id(),agent);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

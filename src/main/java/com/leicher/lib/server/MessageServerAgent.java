@@ -1,6 +1,9 @@
 package com.leicher.lib.server;
 
+import com.leicher.lib.manage.BaseSocket;
+import com.leicher.lib.manage.SocketManager;
 import com.leicher.lib.manage.SocketThread;
+import com.leicher.lib.util.IdUtil;
 
 import java.net.Socket;
 
@@ -8,7 +11,7 @@ import java.net.Socket;
  * Created by Administrator on 2017/5/22.
  */
 
-public class MessageServerAgent implements SocketThread {
+public class MessageServerAgent extends BaseSocket implements SocketThread {
 
     private Socket socket;
 
@@ -23,22 +26,24 @@ public class MessageServerAgent implements SocketThread {
 
     @Override
     public void onDestroy() {
-
+        IdUtil.destroyId(id());
     }
 
     @Override
     public boolean isClosed() {
-        return false;
+        return socket == null || socket.isClosed();
     }
 
     @Override
-    public boolean shutDown() {
-        return false;
+    public void shutDown() {
+        setIntercept(true);
+        manager.remove(this);
     }
 
+
     @Override
-    public boolean shutDownNow() {
-        return false;
+    public int id() {
+        return id;
     }
 
     @Override

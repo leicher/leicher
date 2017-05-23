@@ -40,7 +40,10 @@ public class SocketManager {
     }
 
     public SocketManager put(int id , SocketThread socket){
-        mSockets.put(id,socket);
+        if (socket != null) {
+            socket.onCreate();
+            mSockets.put(id, socket);
+        }
         return instance;
     }
 
@@ -50,7 +53,19 @@ public class SocketManager {
     }
 
     public SocketManager remove(int id){
+        SocketThread socket = get(id);
+        if (socket != null){
+            socket.onDestroy();
+        }
         mSockets.remove(id);
+        return instance;
+    }
+
+    public SocketManager remove(SocketThread socket){
+        if (socket != null){
+            socket.onDestroy();
+        }
+        mSockets.removeAt(mSockets.indexOfValue(socket));
         return instance;
     }
 
@@ -75,21 +90,14 @@ public class SocketManager {
         return instance;
     }
 
-    public SocketManager shutDownNow(int id){
-        SocketThread socket = get(id);
-        if (socket != null){
-            socket.shutDownNow();
-        }
-        return instance;
-    }
 
     public SocketManager shutDownAll(){
         for (int i = 0 ; i < mSockets.size() ; i++){
             SocketThread socket = mSockets.valueAt(i);
             if (socket != null){
-                socket.shutDownNow();
+                socket.shutDown();
             }
-            mSockets.removeAt(i);
+            //mSockets.removeAt(i);
         }
         executor.shutdown();
         return instance;

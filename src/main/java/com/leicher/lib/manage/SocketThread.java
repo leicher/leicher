@@ -12,9 +12,7 @@ public interface SocketThread extends Runnable {
 
     boolean isClosed();
 
-    boolean shutDown();
-
-    boolean shutDownNow();
+    void shutDown();
 
     int id();
 
