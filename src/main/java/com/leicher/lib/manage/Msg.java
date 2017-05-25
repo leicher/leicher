@@ -8,6 +8,8 @@ import java.io.Serializable;
 
 public class Msg implements Serializable{
 
+    private int id;
+
     private int size;
 
     private int type;
@@ -18,10 +20,25 @@ public class Msg implements Serializable{
         this.type = type;
     }
 
-    public Msg(int size, int type, String data) {
+
+
+    public Msg(int type, int id ) {
+        this.type = type;
+        this.id = id;
+    }
+
+    public Msg(int id, int size, int type) {
+        this.id = id;
         this.size = size;
         this.type = type;
-        this.data = data;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Msg() {
@@ -53,7 +70,7 @@ public class Msg implements Serializable{
 
     @Override
     public String toString() {
-        return "[type=" + type + ",size=" +
+        return "[id=" + id +",type=" + type + ",size=" +
                 size + ",data=" + data + "]";
     }
 
@@ -65,6 +82,7 @@ public class Msg implements Serializable{
         Msg msg = (Msg) o;
 
         if (size != msg.size) return false;
+        if (id != msg.id) return false;
         return type == msg.type;
 
     }

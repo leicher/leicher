@@ -16,4 +16,6 @@ public interface SocketThread extends Runnable {
 
     int id();
 
+    void write(Msg msg);
+
 }

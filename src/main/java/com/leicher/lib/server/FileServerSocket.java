@@ -1,6 +1,7 @@
 package com.leicher.lib.server;
 
 
+import com.leicher.lib.manage.Msg;
 import com.leicher.lib.manage.SocketThread;
 import com.leicher.lib.util.CloseUtil;
 import com.leicher.lib.util.Constants;
@@ -51,7 +52,7 @@ public class FileServerSocket implements SocketThread {
             socket = new ServerSocket(Constants.FILE_PORT);
         } catch (IOException e) {
             e.printStackTrace();
-            CloseUtil.closeServerSocket(socket);
+            CloseUtil.close(socket);
         }
     }
 
@@ -59,7 +60,7 @@ public class FileServerSocket implements SocketThread {
     @Override
     public void onDestroy() {
         if (!isClosed()){
-            CloseUtil.closeServerSocket(socket);
+            CloseUtil.close(socket);
         }
     }
 
@@ -69,18 +70,18 @@ public class FileServerSocket implements SocketThread {
     }
 
     @Override
-    public boolean shutDown() {
-        return false;
-    }
+    public void shutDown() {
 
-    @Override
-    public boolean shutDownNow() {
-        return false;
     }
 
     @Override
     public int id() {
         return 0;
+    }
+
+    @Override
+    public void write(Msg msg) {
+
     }
 
 

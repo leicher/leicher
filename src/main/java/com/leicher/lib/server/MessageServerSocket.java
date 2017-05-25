@@ -1,6 +1,7 @@
 package com.leicher.lib.server;
 
 import com.leicher.lib.manage.BaseSocket;
+import com.leicher.lib.manage.Msg;
 import com.leicher.lib.manage.SocketManager;
 import com.leicher.lib.manage.SocketThread;
 import com.leicher.lib.util.CloseUtil;
@@ -15,7 +16,7 @@ import java.net.Socket;
  * Created by Administrator on 2017/5/16.
  */
 
-public class MessageServerSocket extends BaseSocket implements SocketThread{
+public class MessageServerSocket extends BaseSocket {
 
     private ServerSocket socket;
 
@@ -26,14 +27,14 @@ public class MessageServerSocket extends BaseSocket implements SocketThread{
             socket = new ServerSocket(Constants.MSG_PORT);
         } catch (IOException e) {
             e.printStackTrace();
-            CloseUtil.closeServerSocket(socket);
+            CloseUtil.close(socket);
         }
     }
 
     @Override
     public void onDestroy() {
         if (!isClosed()){
-            CloseUtil.closeServerSocket(socket);
+            CloseUtil.close(socket);
         }
         IdUtil.destroyId(id());
     }
@@ -55,17 +56,27 @@ public class MessageServerSocket extends BaseSocket implements SocketThread{
     }
 
     @Override
+    public synchronized void write(Msg msg) {
+
+    }
+
+    @Override
     public void run() {
         if (!isClosed()){
             while (!isIntercept()){
                 try {
                     MessageServerAgent agent = new MessageServerAgent(socket.accept());
-                    SocketManager.init().put(agent.id(),agent);
+                    manager.put(agent.id(),agent);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
         }
+    }
+
+    @Override
+    protected boolean createId() {
+        return true;
     }
 }

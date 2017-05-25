@@ -27,7 +27,7 @@ public class CloseUtil {
         }
     }
 
-    public static void closeSocket(Socket... sockets){
+    public static void close(Socket... sockets){
         for (Socket s:sockets){
             try {
                 if (s != null && !s.isClosed()){
@@ -38,7 +38,7 @@ public class CloseUtil {
             }
         }
     }
-    public static void closeServerSocket(ServerSocket... sockets){
+    public static void close(ServerSocket... sockets){
         for (ServerSocket s:sockets){
             try {
                 if (s != null && !s.isClosed()){

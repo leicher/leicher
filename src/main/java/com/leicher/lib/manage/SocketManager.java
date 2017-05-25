@@ -48,7 +48,7 @@ public class SocketManager {
     }
 
 
-    private SocketThread get(int id){
+    public SocketThread get(int id){
         return mSockets.get(id);
     }
 
