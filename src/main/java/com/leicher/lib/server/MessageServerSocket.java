@@ -44,11 +44,6 @@ public class MessageServerSocket extends BaseSocket {
         return socket == null || socket.isClosed();
     }
 
-    @Override
-    public void shutDown() {
-        setIntercept(true);
-        manager.remove(this);
-    }
 
     @Override
     public int id() {

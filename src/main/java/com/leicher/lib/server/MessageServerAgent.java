@@ -51,11 +51,6 @@ public class MessageServerAgent extends BaseSocket {
         return socket == null || socket.isClosed();
     }
 
-    @Override
-    public void shutDown() {
-        setIntercept(true);
-        manager.remove(this);
-    }
 
 
     @Override

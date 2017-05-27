@@ -1,21 +1,21 @@
 package com.leicher.lib.server;
 
-
+import com.leicher.lib.manage.BaseSocket;
 import com.leicher.lib.manage.Msg;
 import com.leicher.lib.manage.SocketThread;
 import com.leicher.lib.util.CloseUtil;
 import com.leicher.lib.util.Constants;
+import com.leicher.lib.util.IdUtil;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
-import java.net.Socket;
+
 
 /**
  * Created by Administrator on 2017/5/16.
  */
 
-public class FileServerSocket implements SocketThread {
+public class FileServerSocket extends BaseSocket {
 
     private ServerSocket socket;
 
@@ -30,18 +30,14 @@ public class FileServerSocket implements SocketThread {
     @Override
     public void run() {
         if (!isClosed()){
-            try {
-                socket.accept();
-
-
-
-
-
-
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            FileServerAgent agent = null;
+            while (!isIntercept()) {
+                try {
+                    agent = new FileServerAgent(socket.accept());
+                    manager.put(agent.id(),agent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -62,6 +58,7 @@ public class FileServerSocket implements SocketThread {
         if (!isClosed()){
             CloseUtil.close(socket);
         }
+        IdUtil.destroyId(id());
     }
 
     @Override
@@ -69,20 +66,19 @@ public class FileServerSocket implements SocketThread {
         return socket == null || socket.isClosed();
     }
 
-    @Override
-    public void shutDown() {
 
-    }
 
     @Override
     public int id() {
-        return 0;
+        return id;
     }
 
     @Override
-    public void write(Msg msg) {
+    public void write(Msg msg) {}
 
+
+    @Override
+    protected boolean createId() {
+        return true;
     }
-
-
 }

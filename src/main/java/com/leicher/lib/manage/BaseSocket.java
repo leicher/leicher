@@ -6,6 +6,8 @@ import com.leicher.lib.util.IdUtil;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Created by Administrator on 2017/5/23.
@@ -90,6 +92,13 @@ public abstract class BaseSocket implements MsgType,SocketThread{
         }
     }
 
+    @Override
+    public void shutDown() {
+        setIntercept(true);
+        manager.remove(this);
+    }
+
+
 
     protected void write(Msg msg, DataOutputStream dos) throws Exception{
         byte[] datas = null;
@@ -110,6 +119,14 @@ public abstract class BaseSocket implements MsgType,SocketThread{
     }
 
 
+    protected void copy(InputStream is, OutputStream os) throws Exception{
+        int len;
+        byte buf[] = new byte[BUFFER_SIZE];
+        while (-1 != (len = is.read(buf))){
+            os.write(buf,0,len);
+        }
+        os.flush();
+    }
 
 
 }

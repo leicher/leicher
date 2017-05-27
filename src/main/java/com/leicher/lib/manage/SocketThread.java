@@ -6,6 +6,8 @@ package com.leicher.lib.manage;
 
 public interface SocketThread extends Runnable {
 
+    int BUFFER_SIZE = 1024;
+
     void onCreate();
 
     void onDestroy();

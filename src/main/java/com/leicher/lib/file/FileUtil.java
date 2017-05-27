@@ -298,7 +298,7 @@ public class FileUtil {
      */
     public static void write(String data,String path,String name){
         try {
-            write(data.getBytes(CharSet.UTF8.getValue()),path,name);
+            write(data.getBytes(CharSet.UTF8),path,name);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -346,7 +346,7 @@ public class FileUtil {
                         throw new IllegalStateException("this file is too big");
                     }
                 }
-                return bos.toString(CharSet.UTF8.getValue());
+                return bos.toString(CharSet.UTF8);
             }  catch (IOException e) {
                 e.printStackTrace();
             }finally {
