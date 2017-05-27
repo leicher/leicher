@@ -23,7 +23,7 @@ public class WiFiUtil {
     }
 
     public static WifiManager wifiManager(Context context){
-        return (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        return (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     }
 
     public static boolean connectWiFi(Context context,String name){
